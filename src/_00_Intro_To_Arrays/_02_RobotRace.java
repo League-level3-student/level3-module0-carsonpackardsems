@@ -5,9 +5,12 @@ import java.util.Random;
 import javax.swing.JOptionPane;
 
 import org.jointheleague.graphical.robot.Robot;
-
 public class _02_RobotRace {
-	// 1. make a main method
+	static // 1. make a main method
+	int inTheLead = 0;
+	static Random R = new Random();
+	static int random = R.nextInt(50);
+	static boolean raceOver = false;
 	public static void main(String[] args) {
 		Robot[] robots = new Robot[5];
 		int spacer = 0;
@@ -26,7 +29,19 @@ public class _02_RobotRace {
 		}
 		// 5. use another for loop to iterate through the array and make each robot move
 		// a random amount less than 50.
-
+		while(raceOver == false) {
+		for (int i = 0; i < robots.length; i++) {
+			robots[i].move(random);
+			random = R.nextInt(50);
+			inTheLead = i;
+			if(robots[i].getY() <= 0) {
+				raceOver = true;
+			}
+		}
+		}
+		if(raceOver == true) {
+			JOptionPane.showMessageDialog(null, "Robot " + inTheLead + " won this year's Robot Race!");
+		}
 		// 6. use a while loop to repeat step 5 until a robot has reached the top of the
 		// screen.
 
