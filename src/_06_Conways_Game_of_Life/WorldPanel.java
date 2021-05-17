@@ -15,7 +15,8 @@ public class WorldPanel extends JPanel implements MouseListener, ActionListener 
     private static final long serialVersionUID = 1L;
     private int cellsPerRow;
     private int cellSize;
-
+    Random random = new Random();
+    public int RI = random.nextInt(1);
     private Timer timer;
 
     // 1. Create a 2D array of Cells. Do not initialize it.
@@ -30,23 +31,40 @@ Cell[][] cellArray;
         // 2. Calculate the cell size.
 int cellSize = w/cpr;
         // 3a. Initialize the cell array to the appropriate size.
-
+cellArray = new Cell[cpr][cpr];
         // 3b. Iterate through the array and initialize each cell.
         //    Don't forget to consider the cell's dimensions when 
         //    passing in the location.
-
+for(int i = 0; i < cellArray.length; i++) {
+	for(int j = 0; j < cellArray[i].length; j++) {
+		cellArray[i][j] = new Cell(i, j, cellSize);
+	}
+}
     }
 
     public void randomizeCells() {
         // 4. Iterate through each cell and randomly set each
         //    cell's isAlive memeber to true of false
-
+    	for(int i = 0; i < cellArray.length; i++) {
+    		for(int j = 0; j < cellArray[i].length; j++) {
+    			if(RI == 0) {
+    				cellArray[i][j].isAlive = true;
+    			}
+    			else {
+    				cellArray[i][j].isAlive = false;
+    			}
+    		}
+    	}
         repaint();
     }
 
     public void clearCells() {
         // 5. Iterate through the cells and set them all to dead.
-
+    	for(int i = 0; i < cellArray.length; i++) {
+    		for(int j = 0; j < cellArray[i].length; j++) {
+    			cellArray[i][j].isAlive = false;
+    		}
+    		}
         repaint();
     }
 
@@ -65,7 +83,11 @@ int cellSize = w/cpr;
     @Override
     public void paintComponent(Graphics g) {
         // 6. Iterate through the cells and draw them all
-
+    	for(int i = 0; i < cellArray.length; i++) {
+    		for(int j = 0; j < cellArray[i].length; j++) {
+    			cellArray[i][j].draw(g);
+    		}
+    		}
 
         // Draw the perimeter of the grid
         g.setColor(Color.BLACK);
@@ -77,9 +99,15 @@ int cellSize = w/cpr;
         // 7. iterate through cells and fill in the livingNeighbors array
         //    using the getLivingNeighbors method.
         int[][] livingNeighbors = new int[cellsPerRow][cellsPerRow];
-
+        for(int i = 0; i < cellArray.length; i++) {
+    		for(int j = 0; j < cellArray[i].length; j++) {
+    		//cellArray[i][j].	
+        cellArray[i][j].liveOrDie(getLivingNeighbors(null, 0, 0));
+    		}
+    		}
         // 8. check if each cell should live or die
-
+        	
+        
         repaint();
     }
 
@@ -144,7 +172,17 @@ int cellSize = w/cpr;
         //    cellSize, meaning it's possible to click inside of a cell. You
         //    have to determine the cell that was clicked from the pixel
         //    location and toggle the 'isAlive' variable for that cell.
-
+    	int x = e.getX();
+    	int y = e.getY();
+    	int cellClickedX = x/cellSize;
+    	int cellClickedY = y/cellSize;
+    	if(cellArray[x][y].isAlive == true) {
+    		cellArray[x][y].isAlive = false;
+    	}
+    	else {
+    		cellArray[x][y].isAlive = true;
+    	}
+    	
         repaint();
     }
 
